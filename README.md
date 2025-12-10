@@ -15,6 +15,8 @@ https://www.kaggle.com/datasets/jessicali9530/lfw-dataset?select=lfw_allnames.cs
 
 ## How to run
 
-### Local execution
-1. clone repository:
-   ```git clone ```
+### Google Colab
+1. Download ```final_notebook.ipynb```
+2. Upload to Google Colab
+3. Run the cells to retrieve the data
+  * still working on correctly loading and cleaning the data
