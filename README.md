@@ -23,4 +23,5 @@ https://www.kaggle.com/datasets/jessicali9530/lfw-dataset?select=lfw_allnames.cs
 
 ## Author
 Pedro Ramos-Maciel
+
 Math 120 - Fall 2025
