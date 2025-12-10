@@ -20,3 +20,7 @@ https://www.kaggle.com/datasets/jessicali9530/lfw-dataset?select=lfw_allnames.cs
 2. Upload to Google Colab
 3. Run the cells to retrieve the data
   * still working on correctly loading and cleaning the data
+
+## Author
+Pedro Ramos-Maciel
+Math 120 - Fall 2025
