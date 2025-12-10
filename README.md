@@ -1,2 +1,4 @@
-# math120_final
-Math 120 Python final: Facial recognition with pca
+# Math 120 Python Final: Facial Recognition with PCA
+
+## Dataset
+
