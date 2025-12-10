@@ -10,4 +10,11 @@ https://www.kaggle.com/datasets/jessicali9530/lfw-dataset?select=lfw_allnames.cs
 ## Requirements
 
 * Python 3.7+
-* 
+* Jupyter
+* pandas
+
+## How to run
+
+### Local execution
+1. clone repository:
+   ```git clone ```
