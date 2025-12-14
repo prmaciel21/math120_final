@@ -45,8 +45,6 @@ def save_data(cleaned_df, src_path, output_path):
     data (pd.DataFrame): The DataFrame to save.
     file_path (str): The path where the CSV file will be saved.
     """
-    
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     for person in cleaned_df['name'].unique():
         person_src_folder = os.path.join(src_path, person)
         person_out_folder = os.path.join(output_path, person)
