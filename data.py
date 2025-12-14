@@ -65,7 +65,7 @@ def save_data(cleaned_df, src_path, output_path):
     data (pd.DataFrame): The DataFrame to save.
     file_path (str): The path where the CSV file will be saved.
     """
-    if os.path.isdir(src_path) is False:
+    if os.path.isdir("/kaggle/input/lfw-dataset/lfw-deepfunneled/lfw-deepfunneled/Amelia_Mauresmo") is False:
         raise FileNotFoundError(f"The source path at {src_path} does not exist.")
     for person in cleaned_df['name']:
         if not os.path.exists(output_path):
