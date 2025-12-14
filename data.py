@@ -37,25 +37,6 @@ def clean_data(data):
 
     return cleaned_df
 
-def check_if_dir_exists(parent, dir_name):
-    """
-    Check if a directory exists.
-
-    Parameters:
-    directory (str): The path to the directory.
-
-    Returns:
-    bool: True if the directory exists, False otherwise.
-    """
-    target_path = os.path.join(parent, dir_name)
-
-    # Check if the path exists AND is a directory
-    if os.path.isdir(target_path):
-        print(f"'{target_path}' exists and is a directory.")
-        return True
-    else:
-        print(f"'{target_path}' does not exist or is not a directory.")
-        return False
     
 def save_data(cleaned_df, src_path, output_path):
     """
@@ -65,14 +46,18 @@ def save_data(cleaned_df, src_path, output_path):
     data (pd.DataFrame): The DataFrame to save.
     file_path (str): The path where the CSV file will be saved.
     """
-    if os.path.isdir("/kaggle/input/lfw-dataset/lfw-deepfunneled/lfw-deepfunneled/Amelia_Mauresmo") is False:
-        raise FileNotFoundError(f"The source path at {src_path} does not exist.")
-    for person in cleaned_df['name']:
-        if not os.path.exists(output_path):
+    if not os.path.exists(output_path):
             os.makedirs(output_path)
-        
-        if check_if_dir_exists(src_path, person) is False:
+    
+    for person in cleaned_df['name'].unique():
+        src_path_person = os.path.join(src_path, person)
+        out_path_person = os.path.join(output_path, "/"+person)
+
+        if os.path.isdir(src_path_person) is False:
             print(f"[WARNING] No folder found for: {person}")
             continue
-        else:
-            shutil.copytree(os.path.join(src_path, person), os.path.join(output_path+'/', person))
+        if os.path.exists(out_path_person):
+            print(f"[WARNING] Folder already exists for: {person}")
+            continue
+        
+        shutil.copytree(src_path_person, out_path_person)
