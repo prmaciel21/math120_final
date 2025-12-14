@@ -37,6 +37,26 @@ def clean_data(data):
 
     return cleaned_df
 
+def check_if_dir_exists(parent, dir_name):
+    """
+    Check if a directory exists.
+
+    Parameters:
+    directory (str): The path to the directory.
+
+    Returns:
+    bool: True if the directory exists, False otherwise.
+    """
+    target_path = os.path.join(parent, dir_name)
+
+    # Check if the path exists AND is a directory
+    if os.path.isdir(target_path):
+        print(f"'{target_path}' exists and is a directory.")
+        return True
+    else:
+        print(f"'{target_path}' does not exist or is not a directory.")
+        return False
+    
 def save_data(cleaned_df, src_path, output_path):
     """
     Save a pandas DataFrame to a CSV file.
@@ -45,22 +65,12 @@ def save_data(cleaned_df, src_path, output_path):
     data (pd.DataFrame): The DataFrame to save.
     file_path (str): The path where the CSV file will be saved.
     """
-    for person in cleaned_df['name'].unique():
-        person_src_folder = os.path.join(src_path, person)
-        person_out_folder = os.path.join(output_path, person)
+    for person in cleaned_df['name']:
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
         
-        if not os.path.exists(person_src_folder):
+        if check_if_dir_exists(src_path, person) is False:
             print(f"[WARNING] No folder found for: {person}")
             continue
-
-        os.makedirs(person_out_folder, exist_ok=True)
-
-        img_files = os.listdir(person_src_folder)
-        img_files = [f for f in img_files if f.lower().endswith(".jpg")]
-
-        for img in img_files:
-            src = os.path.join(person_src_folder, img)
-            dst = os.path.join(person_out_folder, img)
-            shutil.copy2(src, dst)
-
-        print(f"[COPIED] {len(img_files)} images for: {person}")
+        else:
+            shutil.copytree(os.path.join(src_path, person), os.path.join(output_path+'/', person))
