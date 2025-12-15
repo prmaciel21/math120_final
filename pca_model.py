@@ -8,7 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
-IMG_SIZE = (64, 64)  # Resize images to 64x64
+IMG_SIZE = (96, 96)  # Resize images to 64x64
 
 def load_img(img_dir):
     '''
