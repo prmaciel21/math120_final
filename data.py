@@ -38,26 +38,38 @@ def clean_data(data):
     return cleaned_df
 
     
-def save_data(cleaned_df, src_path, output_path):
+def save_data(cleaned_df, src_path, output_path, min_imgs=20, max_imgs=30):
     """
-    Save a pandas DataFrame to a CSV file.
+    Copy person image folders from src_path to output_path
+    if they contain between min_imgs and max_imgs images.
+    """
 
-    Parameters:
-    data (pd.DataFrame): The DataFrame to save.
-    file_path (str): The path where the CSV file will be saved.
-    """
-    if not os.path.exists(output_path):
-            os.makedirs(output_path)
-    
-    for person in cleaned_df['name'].unique():
+    os.makedirs(output_path, exist_ok=True)
+    copied = 0
+
+    for name in cleaned_df['name'].unique():
+        person = name.replace(" ", "_")  # 🔑 FIX
+
         src_path_person = os.path.join(src_path, person)
         out_path_person = os.path.join(output_path, person)
 
-        if os.path.isdir(src_path_person) is False:
-            print(f"[WARNING] No folder found for: {person}")
+        if not os.path.isdir(src_path_person):
+            print(f"[SKIP] No folder found: {person}")
             continue
+
+        img_count = len([
+            f for f in os.listdir(src_path_person)
+            if f.lower().endswith(('.jpg', '.jpeg', '.png'))
+        ])
+
+        if not (min_imgs <= img_count <= max_imgs):
+            print(f"[SKIP] {person}: {img_count} images")
+            continue
+
         if os.path.exists(out_path_person):
-            print(f"[WARNING] Folder already exists for: {person}")
+            print(f"[SKIP] Exists: {person}")
             continue
-        
+
         shutil.copytree(src_path_person, out_path_person)
+        copied += 1
+        print(f"[COPIED] {person}: {img_count} images")
