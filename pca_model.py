@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 IMG_SIZE = (64, 64)  # Resize images to 64x64
 
@@ -41,13 +43,28 @@ def load_img(img_dir):
     
     return np.array(X), np.array(y), label_map
 
-def compute_pca(X, n_components=50):
+def compute_pca(X, variance_threshold=0.95):
     '''
-    Standardize the data and compute PCA.
+    Normalize data and compute PCA, selecting components
+    to preserve the desired variance.
     '''
 
+    #normalize pixel values
+    X = X / 255.0
+
+    #first PCA to determine number of components
+    pca_full = PCA(whiten=True, random_state=42)
+    X_pca_full = pca_full.fit_transform(X)
+
+    cum_var = np.cumsum(pca_full.explained_variance_ratio_)
+    n_components = np.argmax(cum_var >= variance_threshold) + 1
+
+    print(f"Using {n_components} PCA components")
+
+    # Final PCA
     pca = PCA(n_components=n_components, whiten=True, random_state=42)
     X_pca = pca.fit_transform(X)
+
     return pca, X_pca
 
 def plot_mean_face(X):
@@ -76,18 +93,34 @@ def plot_eigenfaces(pca, n_faces=10):
     plt.tight_layout()
     plt.show()
 
-def classifier(X_pca, y):
+def classifier(X_pca, y, label_map=None, show_confusion=True):
     '''
-    Train and evaluate a simple k-NN classifier on the PCA-transformed data.
+    Train and evaluate an SVM classifier on PCA features.
     '''
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X_pca, y, test_size=0.2, random_state=42, stratify=y
+        X_pca, y, test_size=0.2, stratify=y, random_state=42
     )
 
-    clf = KNeighborsClassifier(n_neighbors=1)
-    clf.fit(X_train, y_train)
-    accuracy = clf.score(X_test, y_test)
+    svm = SVC(
+        kernel="rbf",
+        C=10,
+        gamma="scale",
+        class_weight="balanced"
+    )
 
-    print(f"Classifier accuracy: {accuracy * 100:.2f}%")
-    return accuracy
+    svm.fit(X_train, y_train)
+    accuracy = svm.score(X_test, y_test)
+
+    print(f"SVM accuracy: {accuracy * 100:.2f}%")
+
+    # Optional confusion matrix (great for Colab demo)
+    if show_confusion:
+        y_pred = svm.predict(X_test)
+        cm = confusion_matrix(y_test, y_pred)
+        disp = ConfusionMatrixDisplay(cm)
+        disp.plot(xticks_rotation="vertical")
+        plt.title("SVM Confusion Matrix")
+        plt.show()
+
+    return svm, accuracy
