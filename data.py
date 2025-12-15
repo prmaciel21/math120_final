@@ -44,6 +44,9 @@ def save_data(cleaned_df, src_path, output_path, min_imgs=20, max_imgs=30):
     if they contain between min_imgs and max_imgs images.
     """
 
+    print("DEBUG output_path:", output_path)
+    print("DEBUG absolute output_path:", os.path.abspath(output_path))
+
     os.makedirs(output_path, exist_ok=True)
     copied = 0
 
@@ -52,6 +55,8 @@ def save_data(cleaned_df, src_path, output_path, min_imgs=20, max_imgs=30):
 
         src_path_person = os.path.join(src_path, person)
         out_path_person = os.path.join(output_path, person)
+
+        print("DEBUG out_path_person:", out_path_person)
 
         if not os.path.isdir(src_path_person):
             print(f"[SKIP] No folder found: {person}")
@@ -72,4 +77,4 @@ def save_data(cleaned_df, src_path, output_path, min_imgs=20, max_imgs=30):
 
         shutil.copytree(src_path_person, out_path_person)
         copied += 1
-        print(f"[COPIED] {person}: {img_count} images")
+    print(f"[COPIED] {person}: {img_count} images")
