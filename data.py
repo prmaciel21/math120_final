@@ -51,7 +51,7 @@ def save_data(cleaned_df, src_path, output_path):
     
     for person in cleaned_df['name'].unique():
         src_path_person = os.path.join(src_path, person)
-        out_path_person = os.path.join(output_path, "/"+person)
+        out_path_person = os.path.join(output_path, person)
 
         if os.path.isdir(src_path_person) is False:
             print(f"[WARNING] No folder found for: {person}")
