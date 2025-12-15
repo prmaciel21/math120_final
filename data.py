@@ -39,42 +39,32 @@ def clean_data(data):
 
     
 def save_data(cleaned_df, src_path, output_path, min_imgs=20, max_imgs=30):
-    """
-    Copy person image folders from src_path to output_path
-    if they contain between min_imgs and max_imgs images.
-    """
-
-    print("DEBUG output_path:", output_path)
-    print("DEBUG absolute output_path:", os.path.abspath(output_path))
+    src_path = os.path.abspath(src_path)
+    output_path = os.path.abspath(output_path)
 
     os.makedirs(output_path, exist_ok=True)
-    copied = 0
 
     for name in cleaned_df['name'].unique():
-        person = name.replace(" ", "_")  # 🔑 FIX
+        person = name.replace(" ", "_")
 
-        src_path_person = os.path.join(src_path, person)
-        out_path_person = os.path.join(output_path, person)
+        src_person = os.path.join(src_path, person)
+        out_person = os.path.join(output_path, person)  # NO leading slash
 
-        print("DEBUG out_path_person:", out_path_person)
+        if not os.path.isdir(src_person):
+            continue
 
-        if not os.path.isdir(src_path_person):
-            print(f"[SKIP] No folder found: {person}")
+        if os.path.isdir(out_person):
+            print(f"[SKIP] Exists in output: {person}")
             continue
 
         img_count = len([
-            f for f in os.listdir(src_path_person)
-            if f.lower().endswith(('.jpg', '.jpeg', '.png'))
+            f for f in os.listdir(src_person)
+            if f.lower().endswith(".jpg")
         ])
 
         if not (min_imgs <= img_count <= max_imgs):
-            print(f"[SKIP] {person}: {img_count} images")
             continue
 
-        if os.path.exists(out_path_person):
-            print(f"[SKIP] Exists: {person}")
-            continue
+        shutil.copytree(src_person, out_person)
+        print(f"[COPIED] {person}")
 
-        shutil.copytree(src_path_person, out_path_person)
-        copied += 1
-    print(f"[COPIED] {person}: {img_count} images")
