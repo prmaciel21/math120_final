@@ -50,7 +50,7 @@ def compute_pca(X, n_components=50):
     X_pca = pca.fit_transform(X)
     return pca, X_pca
 
-def plot_mean_face(pca):
+def plot_mean_face(X):
     '''
     Plot the mean face from the PCA model.
     '''
