@@ -7,6 +7,13 @@ This Python project investigates facial recognition by applying Principal Compon
 
 Source https://www.kaggle.com/datasets/jessicali9530/lfw-dataset?select=lfw_allnames.csv
 
+The files used from this set were the following:
+
+* ```lfw_allnames.csv```: Has 2 columns, 1 corresponding to the name of the person and the other corresponding to how many images of that person exist in the dataset
+* ```lfw-deepfunneled/lfw-deepfunneled/```: This is a directory containing folders of people, where that folder contains all the images pertaining to them
+
+The csv file was used to filter all the people with only 20-30 images. From there, I took all the folders in ```lfw-deepfunneled/``` pertaining to those people in order to perform pca on them.
+
 ## Project Structure
 ```
 math120_final
@@ -31,6 +38,19 @@ math120_final
 2. Upload to Google Colab
 3. Run the first cell to set up the environment
 4. Dependency cells will import data.py and pca_model.py
+
+## Learning Objectives Demonstrated
+
+* Loaded data with Pandas
+* Used Kaggle API to retrieve data
+* Loaded images from the dataset
+* Used Python libraries to perform data analysis
+* Implemented PCA using ```sklearn.decomposition```
+* Used SVC classifier from ```sklearn.svm``` to train a classifier on PCA reduced features
+
+## Summary
+
+This repository contains a facial recognition project that explores the use of Principal Component Analysis (PCA) and supervised classification. Facial image data is obtained using the Kaggle API and preprocessed for analysis in Python. PCA is used to generate eigenfaces and reduce the dimensionality of the data, and a Support Vector Classifier (SVC) is trained to predict identities based on the reduced features. The project demonstrates the full workflow from data acquisition and preprocessing to model training and evaluation.
 
 ## Author
 Pedro Ramos-Maciel
